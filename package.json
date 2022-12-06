@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/claireso/clairesowebsite#readme",
   "dependencies": {
-    "express": "4.17.1",
+    "express": "4.18.2",
     "intersection-observer": "0.12.0",
     "next": "10.2.3",
     "prop-types": "15.7.2",
