@@ -1,0 +1,204 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+import Layout from "@layouts/Layout.astro";
+
+import Container from "@components/generic/Container.astro";
+import RoleTag from "@components/RoleTag.astro";
+import ProjectInfo from "@components/ProjectInfo.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("project");
+  return projects
+    .sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime())
+    .map((project, index) => ({
+      params: { slug: project.slug },
+      props: {
+        project,
+        previousProject: index > 0 ? projects.at(index - 1) : null,
+        nextProject: projects.at(index + 1) ?? null,
+      },
+    }));
+}
+
+const { project, previousProject, nextProject } = Astro.props;
+const { Content } = await project.render();
+---
+
+<Layout title={`Projet ${project.data.name}`}>
+  <Container id="js-page-header">
+    <div class="flex justify-between mb-10">
+      <a href="/" class="inline-flex group"
+        >‹ <span class="ml-1 group-hover:underline">Retour</span></a
+      >
+      <div>
+        {
+          previousProject && (
+            <a href={`/p/${previousProject.slug}`} class="inline-flex group">
+              ‹ <span class="ml-1 group-hover:underline">Projet précédent</span>
+            </a>
+          )
+        }
+        {nextProject && previousProject && <span>·</span>}
+        {
+          nextProject && (
+            <a href={`/p/${nextProject.slug}`} class="inline-flex group">
+              <span class="mr-1 group-hover:underline">Projet suivant</span> ›
+            </a>
+          )
+        }
+      </div>
+    </div>
+    <h2 class="mb-10 text-5xl font-bold">{project.data.name}</h2>
+
+    <ul class="space-y-6 mb-10 max-sm:mb-4">
+      <ProjectInfo title="Entreprise">
+        {project.data.company}
+      </ProjectInfo>
+      <ProjectInfo title="Role" class="sm:items-center">
+        <span class="space-x-2">
+          {project.data.roles.map((role) => <RoleTag role={role} />)}
+        </span>
+      </ProjectInfo>
+      <ProjectInfo title="Projet">
+        <Content />
+      </ProjectInfo>
+      <ProjectInfo title="Stack">
+        {project.data.stack.join(" · ")}
+      </ProjectInfo>
+      {
+        project.data.website && (
+          <ProjectInfo title="Website">
+            <a
+              href={project.data.website}
+              target="_blank"
+              rel="noopener"
+              class="hover:underline"
+            >
+              {project.data.website}
+            </a>
+          </ProjectInfo>
+        )
+      }
+    </ul>
+  </Container>
+  <div class="bg-gray-50 shadow-inner">
+    <Container size="max-w-4xl">
+      <div class="space-y-8 max-sm:space-y-6">
+        {
+          project.data.images.map(({ url, width, height }, index) => (
+            <div class="border-12 sm:border-24 border-white shadow-lg">
+              <Image
+                class:list={[
+                  "js-img w-full h-auto opacity-0",
+                  "transition-opacity",
+                  index > 0
+                    ? "delay-800 duration-1000"
+                    : "delay-100 duration-800",
+                ]}
+                src={`/img/p/${url}`}
+                alt=""
+                width={width}
+                height={height}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </Container>
+    <button
+      id="js-go-to-top"
+      class:list={[
+        "fixed bottom-12 right-12 w-12 h-12",
+        "flex items-center justify-center",
+        "text-2xl bg-white border border-gray-200 rounded  shadow",
+        "hover:bg-gray-100 hover:border-gray-300",
+        "transition",
+      ]}
+    >
+      ↑
+    </button>
+  </div>
+</Layout>
+
+<script>
+  // script to manage the button go to top
+  function init() {
+    // initialize elements
+    const buttonElement = document.querySelector("#js-go-to-top");
+    const pageHeaderElement = document.querySelector("#js-page-header");
+    const observerOptions = {
+      threshold: 0.3,
+    };
+
+    // detect when page header is visible and toogle button go to top
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          buttonElement?.classList.add("opacity-0");
+          buttonElement?.classList.add("invisible");
+          buttonElement?.classList.remove("opacity-1");
+        } else {
+          buttonElement?.classList.remove("opacity-0");
+          buttonElement?.classList.remove("invisible");
+          buttonElement?.classList.add("opacity-1");
+        }
+      });
+    }, observerOptions);
+
+    // initialize functions
+    // go to top of the webpage
+    function goToTop() {
+      window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+    }
+
+    // desctroy all initialized events
+    function destroy() {
+      buttonElement?.removeEventListener("click", goToTop);
+      if (pageHeaderElement) {
+        observer.unobserve(pageHeaderElement);
+      }
+    }
+
+    // attach listeners
+    buttonElement?.addEventListener("click", goToTop);
+    // Clean up by removing event listeners
+    document.addEventListener("astro:before-swap", destroy, { once: true });
+
+    // observe page header visibility
+    if (pageHeaderElement) {
+      observer.observe(pageHeaderElement);
+    }
+  }
+
+  // initialize on first load
+  init();
+
+  // because we using viewTransition we need to re-initialize after swapping pages
+  document.addEventListener("astro:after-swap", init);
+</script>
+
+<script>
+  // script to manage the img transtition
+  function init() {
+    // initialize elements
+    const imgElements = document.querySelectorAll(".js-img");
+
+    imgElements.forEach((img) => {
+      img.addEventListener(
+        "load",
+        () => {
+          img.classList.remove("opacity-0");
+        },
+        { once: true },
+      );
+    });
+  }
+
+  // initialize on first load
+  init();
+
+  // because we using viewTransition we need to re-initialize after swapping pages
+  document.addEventListener("astro:after-swap", init);
+</script>

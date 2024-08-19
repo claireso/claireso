@@ -1,0 +1,21 @@
+---
+interface Props {
+  borderColor?: string;
+  bgColor?: string;
+  textColor?: string;
+  class?: string;
+}
+
+const {
+  borderColor = "border-gray-300",
+  bgColor = "bg-gray-100",
+  textColor = "text-gray-600",
+  class: className = "",
+} = Astro.props;
+---
+
+<span
+  class={`text-sm inline-flex px-2 py-1 rounded-lg border ${borderColor} ${bgColor} ${textColor} ${className}`}
+>
+  <slot />
+</span>

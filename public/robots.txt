@@ -1,11 +1,13 @@
 User-agent: *
+Disallow: /p/studio
+Disallow: /p/pro
 Disallow: /*.gif$
 Disallow: /*.mp4$
 Disallow: /*.png$
 Disallow: /*.jpeg$
+Disallow: /*.jpg$
 Disallow: /*.ico$
 Disallow: /*.svg$
-Disallow: /static/img/
 
 User-agent: Googlebot-Image
 Disallow: /

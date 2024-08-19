@@ -1,0 +1,46 @@
+---
+import Section from "./generic/Section.astro";
+import RoleTag from "./RoleTag.astro";
+import Tag from "./generic/Tag.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  projects: CollectionEntry<"project">[];
+}
+
+const { projects } = Astro.props;
+---
+
+<Section title="Projets">
+  <ul>
+    {
+      projects.map(({ slug, data: { name, category, roles } }) => (
+        <li>
+          <a
+            class="py-3 flex justify-between gap-x-7 items-center group"
+            href={`/p/${slug}`}
+          >
+            <h3 class="font-medium text-base">{name}</h3>
+            <hr class="grow group-hover:border-gray-400 transition duration-300" />
+            <div class="space-x-2">
+              <span class="text-gray-500 text-sm">{category}</span>{" "}
+              <span class="max-xs:hidden">·</span>
+              {roles.map((role, index) => (
+                <RoleTag
+                  role={role}
+                  class:list={[
+                    `max-xs:hidden`,
+                    index > 1 ? "max-sm:hidden" : "",
+                  ]}
+                />
+              ))}
+              {roles.length > 2 && (
+                <Tag class="sm:hidden max-xs:hidden">+ {roles.length - 2}</Tag>
+              )}
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Section>

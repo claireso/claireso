@@ -1,0 +1,53 @@
+---
+import { RoleEnum } from "@types";
+import Tag from "./generic/Tag.astro";
+
+interface Props {
+  role: RoleEnum;
+  class?: string;
+}
+
+const { role, class: className = "" } = Astro.props;
+---
+
+<Fragment>
+  {
+    () => {
+      const props = {
+        textColor: "",
+        bgColor: "",
+        borderColor: "",
+      };
+
+      if (role === RoleEnum.FRONT) {
+        props.textColor = "text-violet-500";
+        props.bgColor = "bg-violet-50";
+        props.borderColor = "border-violet-200";
+      }
+
+      if (role === RoleEnum.BACK) {
+        props.textColor = "text-sky-500";
+        props.bgColor = "bg-sky-50";
+        props.borderColor = "border-sky-200";
+      }
+
+      if (role === RoleEnum.UI_UX) {
+        props.textColor = "text-teal-500";
+        props.bgColor = "bg-teal-50";
+        props.borderColor = "border-teal-200";
+      }
+
+      if (role === RoleEnum.INFRA) {
+        props.textColor = "text-rose-500";
+        props.bgColor = "bg-rose-50";
+        props.borderColor = "border-rose-200";
+      }
+
+      return (
+        <Tag class={className} {...props}>
+          {role}
+        </Tag>
+      );
+    }
+  }
+</Fragment>
