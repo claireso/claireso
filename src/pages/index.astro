@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/generic/Container.astro";
+import About from "@components/About.astro";
+import Projects from "@components/Projects.astro";
+import Contact from "@components/Contact.astro";
+
+const allProjects = await getCollection("project");
+const projects = allProjects.sort(
+  (a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime(),
+);
+---
+
+<Layout>
+  <Container>
+    <div class="space-y-20 max-sm:space-y-12">
+      <About />
+      <Projects projects={projects} />
+      <Contact />
+    </div>
+  </Container>
+</Layout>

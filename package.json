@@ -1,0 +1,20 @@
+{
+  "name": "claireso",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.2",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.13.1",
+    "tailwindcss": "^3.4.8",
+    "typescript": "^5.5.4"
+  }
+}

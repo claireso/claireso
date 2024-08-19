@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string;
+  class?: string;
+}
+
+const { title, class: className = "" } = Astro.props;
+---
+
+<li class={`flex max-sm:flex-col gap-2 ${className}`}>
+  <div class="w-24 text-gray-500">{title} :</div>
+  <div class="basis-11/12 space-y-2">
+    <slot />
+  </div>
+</li>
