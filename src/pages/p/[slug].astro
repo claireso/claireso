@@ -183,13 +183,22 @@ const { Content } = await project.render();
   // script to manage the img transtition
   function init() {
     // initialize elements
-    const imgElements = document.querySelectorAll(".js-img");
+    const imgElements: NodeListOf<HTMLImageElement> = document.querySelectorAll(".js-img");
+
+    function reveal(img: HTMLImageElement) {
+      img.classList.remove("opacity-0");
+    }
 
     imgElements.forEach((img) => {
+      if (img.complete) {
+        reveal(img)
+        return;
+      }
+
       img.addEventListener(
         "load",
         () => {
-          img.classList.remove("opacity-0");
+          reveal(img)
         },
         { once: true },
       );
