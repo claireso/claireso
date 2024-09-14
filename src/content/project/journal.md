@@ -26,6 +26,7 @@ images:
   - { url: "1-1.jpg", width: 1320, height: 744}
   - { url: "1-2.jpg", width: 1320, height: 1498}
   - { url: "1-3.jpg", width: 1320, height: 728}
+  - { url: "1-4.jpg", width: 1320, height: 3255}
 ---
 
 Journal est un projet open source que je développe durant mon temps libre.
