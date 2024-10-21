@@ -13,7 +13,7 @@ stack:
   - next.js
   - tanstack query
   - next-auth
-  - stitches
+  - vanilla extract
   - postgresql
   - zod
   - typescript
@@ -23,9 +23,9 @@ stack:
   - nginx
   - zx
 images:
-  - { url: "1-1.jpg", width: 1320, height: 744}
-  - { url: "1-2.jpg", width: 1320, height: 1498}
-  - { url: "1-3.jpg", width: 1320, height: 728}
+  - { url: "1-1-2.jpg", width: 1320, height: 722}
+  - { url: "1-2-2.jpg", width: 1320, height: 1553}
+  - { url: "1-3-2.jpg", width: 1320, height: 977}
   - { url: "1-4.jpg", width: 1320, height: 3255}
 ---
 
